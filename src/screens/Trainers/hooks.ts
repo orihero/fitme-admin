@@ -1,27 +1,50 @@
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
-import { ROUTES } from "../../routes/ROUTES";
+import { useEffect, useState } from "react";
 
-export const TrainersHooks = () => {
-  const { pathname } = useLocation();
 
-  const [state, setState] = useState("");
+import { REQUESTS } from "../../api/requests";
+import { Trainer } from "../../types";
 
-  let show = true;
-  const addTrainerRoute = `${ROUTES.DASHBOARD}/${ROUTES.TRAINERS}/${ROUTES.ADD_TRAINER}`;
-  const editTrainerRoute = `${ROUTES.DASHBOARD}/${ROUTES.TRAINERS}/${ROUTES.EDIT_TRAINER}`;
-  const readTrainerRoute = `${ROUTES.DASHBOARD}/${ROUTES.TRAINERS}/${ROUTES.READ_TRAINER}`;
-  const condition =
-    pathname === addTrainerRoute ||
-    pathname === `${addTrainerRoute}/` ||
-    pathname === editTrainerRoute ||
-    pathname === `${editTrainerRoute}/` ||
-    pathname === readTrainerRoute ||
-    pathname === `${readTrainerRoute}/`;
+export const TrainersHook = () => {
 
-  if (condition) {
-    show = false;
+  const [trainers, settrainers] = useState<Trainer[]>([])
+  const [loading, setLoading] = useState(false)
+
+  const deleteTrainer = async (id: string) => {
+    try {
+      await REQUESTS.trainers.delete(id)
+    } catch (error) {
+
+    }
   }
 
-  return { state, setState, show };
+  const createTrainer = async (trainer: Partial<Trainer>) => {
+    try {
+      await REQUESTS.trainers.add(trainer)
+    } catch (error) {
+
+    }
+  }
+
+  const effect = async () => {
+    setLoading(true)
+    try {
+      const res = await REQUESTS.trainers.get();
+      settrainers(res.data.data)
+    } catch (e) {
+      console.log("e: ", e);
+    }
+    setLoading(false)
+  };
+
+  useEffect(() => {
+    effect();
+  }, []);
+
+  return {
+    data: trainers,
+    loading,
+    fetchTrainers: effect,
+    deleteTrainer,
+    createTrainer
+  };
 };

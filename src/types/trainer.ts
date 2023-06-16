@@ -1,7 +1,7 @@
 import { BaseUser, GENDER } from ".";
 
 export type Trainer = BaseUser & {
-  trainerGenderType: GENDER;
+  gender: GENDER;
   age: number;
   email: string;
   city: string;
