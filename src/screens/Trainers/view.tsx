@@ -8,12 +8,13 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  MenuItem,
   Stack,
   TextField,
   Tooltip,
 } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
-import { Trainer } from '../../types';
+import { GENDER, Trainer } from '../../types';
 import { TrainersHook } from './hooks';
 
 type LiteralUnion<T extends U, U = string> = T | (U & Record<never, never>);
@@ -133,8 +134,10 @@ const TrainersView = () => {
         accessorKey: 'gender',
         header: 'Gender',
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-          type: 'gender',
+          select: true,
+          children: [GENDER.ALL, GENDER.MALE, GENDER.FEMALE].map(e => (<MenuItem key={e} value={e}>
+            {e}
+          </MenuItem>))
         }),
       },
       {
@@ -142,7 +145,7 @@ const TrainersView = () => {
         header: 'Age',
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
-          type: 'age',
+          type: 'number',
         }),
       },
       {
@@ -179,19 +182,36 @@ const TrainersView = () => {
       },
       {
         accessorKey: 'education',
-        header: 'education',
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-          type: 'select',
-        }),
-      },
-      {
-        accessorKey: 'role',
-        header: 'Role',
-        size: 80,
+        header: 'Education',
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
           type: 'string',
+        }),
+      },
+      {
+        accessorKey: 'instagramLink',
+        header: 'Instagram Link',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+          type: 'string',
+        }),
+
+      },
+      {
+        accessorKey: 'telegramLink',
+        header: 'Telegram Link',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+          type: 'string',
+        }),
+      },
+      {
+        accessorKey: 'aboutMe',
+        header: 'About',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+          type: 'string',
+          multiline: true
         }),
       },
     ],
@@ -288,17 +308,21 @@ export const CreateNewTrainerModal = ({ open, columns, onClose, onSubmit }: Crea
               gap: '1.5rem',
             }}
           >
-            {columns.map((column) => (
-              <TextField
-                key={column.accessorKey}
-                label={column.header}
-                name={column.accessorKey}
-                onChange={(e) =>
-                  setValues({ ...values, [e.target.name]: e.target.value })
-                }
-                disabled={column.enableEditing === undefined ? false : true}
-              />
-            ))}
+            {columns.map((column) => {
+              // if (!!column.muiTableBodyCellEditTextFieldProps && typeof column.muiTableBodyCellEditTextFieldProps === 'function') {
+              // }
+              return (
+                <TextField
+                  key={column.accessorKey}
+                  label={column.header}
+                  name={column.accessorKey}
+                  onChange={(e) =>
+                    setValues({ ...values, [e.target.name]: e.target.value })
+                  }
+                  disabled={column.enableEditing === undefined ? false : true}
+                />
+              )
+            })}
           </Stack>
         </form>
       </DialogContent>

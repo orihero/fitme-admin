@@ -2,11 +2,11 @@ import axios from "axios";
 import { Category, Exercise, Trainer, User } from "../types";
 
 const REMOTE_URL = "https://fitme-api-yng7n.ondigitalocean.app/api";
-const LOCAL_URL = "http://localhost:5000/api"
+const LOCAL_URL = "http://localhost:5001/api"
 
 const axiosInstance = axios.create({
-  baseURL: REMOTE_URL,
-  url: REMOTE_URL,
+  baseURL: LOCAL_URL,
+  url: LOCAL_URL,
 });
 
 export const REQUESTS = {
@@ -27,5 +27,6 @@ export const REQUESTS = {
     add: (data: Partial<Trainer>) => axiosInstance.post("/trainers", data),
     get: (params?: any) => axiosInstance.get("/trainers", { params }),
     delete: (id: string) => axiosInstance.delete(`/trainers/${id}`),
+    edit: (data: Partial<Trainer>) => axiosInstance.put(`/trainers/${data._id}`, data)
   }
 };

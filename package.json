@@ -16,6 +16,7 @@
     "framer-motion": "^10.12.12",
     "material-react-table": "^1.11.4",
     "moment": "^2.29.4",
+    "notistack": "^3.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
